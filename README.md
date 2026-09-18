@@ -8,3 +8,5 @@ send email
 cloning the repository
 setup the project with spring boot 
 start the application by using .\mvnw spring-boot:run
+
+10.09.2026
