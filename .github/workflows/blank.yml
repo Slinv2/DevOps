@@ -33,8 +33,8 @@ jobs:
 
       - name: Build with Gradle inside Docker
         run: |
-          docker run --rm -u gradle \
-          -v "$PWD":/home/gradle/project \
-          -w /home/gradle/project \
-          gradle-latest gradle <task>
+          docker run --rm \
+            -v "$PWD":/home/gradle/project \
+            -w /home/gradle/project \
+            gradle:latest gradle build
 
