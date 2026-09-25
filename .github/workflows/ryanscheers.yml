@@ -33,4 +33,5 @@ jobs:
       - name: Run a multi-line script
         run: |
           docker run --rm -u gradle -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:latest gradle tasks
+          ./gradlew <tasks>
 
