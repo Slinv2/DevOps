@@ -38,5 +38,5 @@ jobs:
           docker run --rm -u gradle -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:jdk17 gradle build
 
       - name: ryanscheersdocker
-        run: docker image build -t docker-java-jar:latest 
+        run: docker image build -t docker-java-jar:latest .
 
