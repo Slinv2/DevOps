@@ -41,4 +41,4 @@ jobs:
             -u $(id -u):$(id -g) \
             -v "$PWD":/home/gradle/project \
             -w /home/gradle/project \
-            eclipse-temurin:17-jdk ./gradlew build --stacktrace --info
+            eclipse-temurin:17-jdk sh -c "./gradlew build --stacktrace --info"
