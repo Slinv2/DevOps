@@ -41,4 +41,4 @@ jobs:
           docker run --rm \
             -v "$PWD":/home/gradle/project \
             -w /home/gradle/project \
-            gradle:latest ./gradlew build
+            gradle:latest gradle build
