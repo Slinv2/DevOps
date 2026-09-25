@@ -38,6 +38,7 @@ jobs:
       - name: Build with Gradle inside Docker
         run: |
           docker run --rm \
+            -u $(id -u):$(id -g) \
             -v "$PWD":/home/gradle/project \
             -w /home/gradle/project \
-            gradle:latest gradle build
+            eclipse-temurin:17-jdk ./gradlew build --stacktrace --info
