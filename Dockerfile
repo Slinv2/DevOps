@@ -5,7 +5,7 @@ FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 # Die gebaute JAR-Datei in den Container kopieren
-COPY build/libs/*.jar app.jar
+COPY build/libs/demo-0.0.1-SNAPSHOT.jar app.jar
 
 # Befehl zum Starten der Anwendung
 ENTRYPOINT ["java", "-jar", "app.jar"]
