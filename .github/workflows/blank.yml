@@ -33,9 +33,8 @@ jobs:
 
       - name: Build with Gradle inside Docker
         run: |
-          docker run --rm \
-            -u $(id -u):$(id -g) \
-            -v ${{ github.workspace }}:/home/gradle/project \
-            -w /home/gradle/project \
-            gradle:8.5-jdk17 \
-            gradle build
+          docker run --rm -u gradle \
+          -v "$PWD":/home/gradle/project \
+          -w /home/gradle/project \
+          gradle gradle <task>
+
