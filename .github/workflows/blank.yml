@@ -30,4 +30,12 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          docker run hello-world
+
+      - name: Build with Gradle inside Docker
+        run: |
+          docker run --rm \
+            -u $(id -u):$(id -g) \
+            -v ${{ github.workspace }}:/home/gradle/project \
+            -w /home/gradle/project \
+            gradle:8.5-jdk17 \
+            gradle build
