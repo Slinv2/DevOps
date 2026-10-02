@@ -32,7 +32,7 @@ jobs:
         run: |
           if [ $(docker ps -q -f name=my-app-container) ]; then
             echo "Gracefully stopping container..."
-            docker stop --time=10 my-app-container
+            docker stop --time=10 my-app-container || true
           fi
 
       # 2. Cleanup / Removal
@@ -40,10 +40,30 @@ jobs:
         run: |
           if [ $(docker ps -a -q -f name=my-app-container) ]; then
             echo "Removing existing container..."
-            docker rm -f my-app-container
+            docker rm -f my-app-container || true
           fi
 
       # 3. Start Container (Detached Mode)
       - name: Run new container
         run: |
           docker run -d --name my-app-container -p 8080:8080 --restart unless-stopped docker-java-jar:latest
+
+      # 4. Integration test: compare live endpoint output against expected fixture
+      - name: Integration test /api/status endpoint
+        run: |
+          sleep 5
+          expected=$(cat expected/status.json)
+          actual=$(curl -s http://localhost:8080/api/status)
+          if [ "$expected" == "$actual" ]; then
+            echo "Integration test passed"
+            exit 0
+          else
+            echo "Integration test failed: expected '$expected' but got '$actual'"
+            exit 1
+          fi
+
+      # 5. Tag and push image to the team Docker registry
+      - name: Push image to registry
+        run: |
+          docker tag docker-java-jar:latest 10.0.40.171:5000/docker-java-jar:latest
+          docker push 10.0.40.171:5000/docker-java-jar:latest
