@@ -52,8 +52,8 @@ jobs:
       - name: Integration test /api/status endpoint
         run: |
           sleep 5
-          expected=$(cat expected/status.json)
-          actual=$(curl -s http://localhost:8080/api/status)
+          expected=$(cat expected/status.json | tr -d '\r\n')
+          actual=$(curl -s http://localhost:8080/api/status | tr -d '\r\n')
           if [ "$expected" == "$actual" ]; then
             echo "Integration test passed"
             exit 0
