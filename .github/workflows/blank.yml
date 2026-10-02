@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "nils" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "nils" ]
+    branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -23,18 +23,19 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: reset permissions 
+        run:  docker run --rm -v "$PWD":/project bash:latest chown --recursive $(id -u):$(id -g) /project
       - uses: actions/checkout@v4
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+    
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          docker run --rm -u gradle -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:jdk17 gradle build
 
-      - name: Build with Gradle inside Docker
-        run: |
-          docker run --rm -u gradle \
-          -v "$PWD":/home/gradle/project \
-          -w /home/gradle/project \
-          gradle-latest gradle <task>
-
+      - name: ourdocker
+        run: docker image build -t docker-java-jar:latest .
