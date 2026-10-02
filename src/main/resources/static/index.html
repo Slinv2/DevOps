@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevOps Demo</title>
+<style>
+    :root {
+        --primary: #6366f1;
+        --secondary: #06b6d4;
+        --bg: #0f172a;
+        --card-bg: rgba(255, 255, 255, 0.06);
+        --text: #f1f5f9;
+        --muted: #94a3b8;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        background: radial-gradient(circle at top left, #1e293b, var(--bg));
+        color: var(--text);
+        padding: 2rem;
+    }
+
+    .card {
+        background: var(--card-bg);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 3rem 2.5rem;
+        max-width: 640px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        text-align: center;
+    }
+
+    .badge {
+        display: inline-block;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        padding: 0.35rem 1rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+        margin-bottom: 0.75rem;
+        background: linear-gradient(90deg, #fff, #cbd5e1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    p.subtitle {
+        color: var(--muted);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    .status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+        color: #4ade80;
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #4ade80;
+        box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
+        animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6); }
+        70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .tile {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 1.2rem 0.8rem;
+        transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .tile:hover {
+        transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .tile .icon {
+        font-size: 1.6rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .tile .label {
+        font-size: 0.85rem;
+        color: var(--muted);
+    }
+
+    footer {
+        margin-top: 2.5rem;
+        font-size: 0.8rem;
+        color: var(--muted);
+    }
+</style>
+</head>
+<body>
+<div class="card">
+    <span class="badge">Spring Boot</span>
+    <h1>DevOps Demo Application</h1>
+    <p class="subtitle">Willkommen! Diese Seite wird direkt aus <code>src/main/resources/static</code> ausgeliefert.</p>
+
+    <div class="status">
+        <span class="dot"></span>
+        Anwendung läuft
+    </div>
+
+    <div class="grid">
+        <div class="tile">
+            <div class="icon">☕</div>
+            <div class="label">Java</div>
+        </div>
+        <div class="tile">
+            <div class="icon">🌱</div>
+            <div class="label">Spring Boot</div>
+        </div>
+        <div class="tile">
+            <div class="icon">🐳</div>
+            <div class="label">Docker</div>
+        </div>
+        <div class="tile">
+            <div class="icon">⚙️</div>
+            <div class="label">Gradle</div>
+        </div>
+    </div>
+
+    <footer>&copy; 2026 DevOps Demo &mdash; gebaut mit Spring Boot</footer>
+</div>
+</body>
+</html>
