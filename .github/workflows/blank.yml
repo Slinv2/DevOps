@@ -30,23 +30,23 @@ jobs:
       # 1. Graceful Interrupt (SIGINT) & Stop (SIGTERM)
       - name: Interrupt and Stop existing container
         run: |
-          if [ $(docker ps -q -f name=my-app-container) ]; then
+          if [ $(docker ps -q -f name=ryannilsemiliemelsimyurtcontainer) ]; then
             echo "Gracefully stopping container..."
-            docker stop --time=10 my-app-container || true
+            docker stop --time=10 ryannilsemiliemelsimyurtcontainer || true
           fi
 
       # 2. Cleanup / Removal
       - name: Remove stopped container
         run: |
-          if [ $(docker ps -a -q -f name=my-app-container) ]; then
+          if [ $(docker ps -a -q -f name=ryannilsemiliemelsimyurtcontainer) ]; then
             echo "Removing existing container..."
-            docker rm -f my-app-container || true
+            docker rm -f ryannilsemiliemelsimyurtcontainer || true
           fi
 
       # 3. Start Container (Detached Mode)
       - name: Run new container
         run: |
-          docker run -d --name my-app-container -p 8080:8080 --restart unless-stopped docker-java-jar:latest
+          docker run -d --name ryannilsemiliemelsimyurtcontainer -p 8080:8080 --restart unless-stopped docker-java-jar:latest
 
       # 4. Integration test: compare live endpoint output against expected fixture
       - name: Integration test /api/status endpoint
