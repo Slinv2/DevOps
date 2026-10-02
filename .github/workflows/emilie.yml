@@ -34,3 +34,6 @@ jobs:
         run: |
           docker run --rm -u gradle  -v "$PWD":/home/gradle/project  -w /home/gradle/project  gradle:latest gradle tasks
 
+      - name: emilieDocker
+        run: docker image build -t docker-java-jar:latest .
+
