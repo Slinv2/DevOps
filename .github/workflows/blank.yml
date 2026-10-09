@@ -11,6 +11,11 @@ jobs:
   build:
     runs-on: self-hosted
 
+    env:
+      REGISTRY: 10.0.40.171:5000
+      IMAGE_NAME: docker-java-jar-ryannilsemiliemelsimyurt
+      IMAGE_TAG: ${{ github.run_number }}
+
     steps:
       - name: reset permissions 
         run: docker run --rm -v "$PWD":/project bash:latest chown --recursive $(id -u):$(id -g) /project
@@ -24,8 +29,22 @@ jobs:
         run: |
           docker run --rm -u gradle -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:jdk17 gradle build
 
+      # SonarQube analysis (uses the JaCoCo XML report produced by 'gradle build')
+      - name: SonarQube scan
+        run: |
+          docker run --rm -u "$(id -u):$(id -g)" \
+            -e SONAR_HOST_URL="http://10.0.40.167:9000" \
+            -e SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}" \
+            -v "$PWD":/usr/src \
+            sonarsource/sonar-scanner-cli \
+            -Dsonar.projectKey=ryannilsemiliemelsim \
+            -Dsonar.sources=src/main \
+            -Dsonar.tests=src/test \
+            -Dsonar.java.binaries=build/classes \
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+
       - name: Build Docker Image
-        run: docker image build -t docker-java-jar:latest .
+        run: docker image build -t "$IMAGE_NAME:$IMAGE_TAG" .
 
       # 1. Graceful Interrupt (SIGINT) & Stop (SIGTERM)
       - name: Interrupt and Stop existing container
@@ -46,7 +65,7 @@ jobs:
       # 3. Start Container (Detached Mode)
       - name: Run new container
         run: |
-          docker run -d --name ryannilsemiliemelsimyurtcontainer -p 8080:8080 --restart unless-stopped docker-java-jar:latest
+          docker run -d --name ryannilsemiliemelsimyurtcontainer -p 8080:8080 --restart unless-stopped "$IMAGE_NAME:$IMAGE_TAG"
 
       # 4. Integration test: compare live endpoint output against expected fixture
       - name: Integration test /api/status endpoint
@@ -67,5 +86,5 @@ jobs:
       # 5. Tag and push image to the team Docker registry
       - name: Push image to registry
         run: |
-          docker tag docker-java-jar:latest 10.0.40.171:5000/docker-java-jar:latest
-          docker push 10.0.40.171:5000/docker-java-jar:latest
+          docker tag "$IMAGE_NAME:$IMAGE_TAG" "$REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+          docker push "$REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
