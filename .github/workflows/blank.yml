@@ -29,7 +29,7 @@ jobs:
         run: |
           docker run --rm -u gradle -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:jdk17 gradle build
 
-      # SonarQube analysis (uses the JaCoCo XML report produced by 'gradle build')
+      # SonarQube analysis 
       - name: SonarQube scan
         run: |
           docker run --rm -u "$(id -u):$(id -g)" \
@@ -46,7 +46,7 @@ jobs:
       - name: Build Docker Image
         run: docker image build -t "$IMAGE_NAME:$IMAGE_TAG" .
 
-      # 1. Graceful Interrupt (SIGINT) & Stop (SIGTERM)
+      # 1. Graceful Interrupt
       - name: Interrupt and Stop existing container
         run: |
           if [ $(docker ps -q -f name=ryannilsemiliemelsimyurtcontainer) ]; then
