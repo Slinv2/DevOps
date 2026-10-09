@@ -83,7 +83,7 @@ jobs:
           echo "Integration test failed after 30 attempts"
           exit 1
 
-      # 5. Tag and push image to the team Docker registry
+      # 5. Tag and push image to the team Docker registry 123
       - name: Push image to registry
         run: |
           docker tag "$IMAGE_NAME:$IMAGE_TAG" "$REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
