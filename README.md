@@ -20,3 +20,6 @@ setup a pipeline
 get in contact with docker
 checked and changed the .yaml
 everyone tested tosetup a workflow
+
+16.10.2026
+setting up the documentation page

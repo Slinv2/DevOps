@@ -1,8 +1,9 @@
 # DevOps @ FHV
 
-Welcome to the documentation of the DevOps project by **Team ryannilsemiliemelsimyurt**.
+Welcome to the documentation of the DevOps project by **Ryan Emilie Melsim Nils**.
+Hiiiiiii whats up, u like our documentation.
 
-This site is generated with [MkDocs](https://www.mkdocs.org/) and the
+This site is build with [MkDocs](https://www.mkdocs.org/) and the
 [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme,
 and served through an [nginx](https://hub.docker.com/_/nginx) container.
 
