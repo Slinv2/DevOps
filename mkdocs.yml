@@ -1,10 +1,10 @@
 site_name: DevOps @ FHV
-site_description: Dokumentation des DevOps Projekts (Team ryannilsemiliemelsimyurt)
+site_description: Documentation of the DevOps project (Team ryannilsemiliemelsimyurt)
 site_author: Team ryannilsemiliemelsimyurt
 
 theme:
   name: material
-  language: de
+  language: en
   features:
     - navigation.sections
     - navigation.top
@@ -15,17 +15,17 @@ theme:
       accent: indigo
       toggle:
         icon: material/brightness-7
-        name: Dark Mode einschalten
+        name: Switch to dark mode
     - scheme: slate
       primary: indigo
       accent: indigo
       toggle:
         icon: material/brightness-4
-        name: Light Mode einschalten
+        name: Switch to light mode
 
 nav:
-  - Start: index.md
-  - Notizen: notes.md
+  - Home: index.md
+  - Notes: notes.md
 
 markdown_extensions:
   - admonition

@@ -1,26 +1,26 @@
 # DevOps @ FHV
 
-Willkommen zur Dokumentation des DevOps Projekts von **Team ryannilsemiliemelsimyurt**.
+Welcome to the documentation of the DevOps project by **Team ryannilsemiliemelsimyurt**.
 
-Diese Seite wird mit [MkDocs](https://www.mkdocs.org/) und dem
-[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) Theme erzeugt
-und über einen [nginx](https://hub.docker.com/_/nginx) Container ausgeliefert.
+This site is generated with [MkDocs](https://www.mkdocs.org/) and the
+[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme,
+and served through an [nginx](https://hub.docker.com/_/nginx) container.
 
-## Projektüberblick
+## Project overview
 
-- Spring Boot Anwendung, gebaut mit Gradle im Container
-- CI/CD Pipeline auf einem self-hosted Build-Agent
-- Statische Code-Analyse mit SonarQube
-- Containerisierung der Anwendung und der Dokumentation
-- Push der Images in die Team-Registry
+- Spring Boot application, built with Gradle inside a container
+- CI/CD pipeline running on a self-hosted build agent
+- Static code analysis with SonarQube
+- Containerization of the application and the documentation
+- Pushing the images to the team registry
 
-## Build-Schritte
+## Build steps
 
-| Schritt            | Container              | Ergebnis                          |
-| ------------------ | ---------------------- | --------------------------------- |
-| Gradle Build       | `gradle:jdk17`         | `.jar` Datei                      |
-| Dokumentation      | `squidfunk/mkdocs-material` | `site/` Ordner (HTML)        |
-| Anwendungs-Image   | `eclipse-temurin:17-jre` | lauffähige App                  |
-| Dokumentations-Image | `nginx`              | ausgelieferte HTML-Dokumentation  |
+| Step                 | Container                   | Result                         |
+| -------------------- | --------------------------- | ------------------------------ |
+| Gradle build         | `gradle:jdk17`              | `.jar` file                    |
+| Documentation        | `squidfunk/mkdocs-material` | `site/` folder (HTML)          |
+| Application image    | `eclipse-temurin:17-jre`    | runnable app                   |
+| Documentation image  | `nginx`                     | served HTML documentation      |
 
-Die laufenden Notizen findest du unter [Notizen](notes.md).
+You can find the ongoing notes under [Notes](notes.md).

@@ -1,33 +1,33 @@
-# Notizen
+# Notes
 
-Laufende Mitschriften aus den Vorlesungen.
+Ongoing notes from the lectures.
 
 ## 02.09.2026 — Lecture 1 Part 1
 
-- GitHub Setup
-- Alle Collaborator hinzugefügt
-- E-Mail versendet
-- Repository geklont
-- Projekt mit Spring Boot aufgesetzt
-- Anwendung gestartet mit `./mvnw spring-boot:run`
+- GitHub setup
+- Added all collaborators
+- Sent email
+- Cloned the repository
+- Set up the project with Spring Boot
+- Started the application using `./mvnw spring-boot:run`
 
 ## 10.09.2026 — Lecture 1 Part 2
 
-- Verbindung zum Remote-Server via SSH mit privatem Key
-- Bash-Befehle geübt (`pwd`, `mkdir`, `dir`, `cd`) und den `vim` Editor getestet
-- Zentrale Git-Befehle wiederholt (`clone`, `pull`, `add`, `commit`, `push`, `fetch`, `branch`)
-- PowerShell 7 installiert :)
+- Connected to the remote server via SSH using my private key
+- Practiced Bash commands (`pwd`, `mkdir`, `dir`, `cd`) and tested the `vim` editor
+- Reviewed core Git commands (`clone`, `pull`, `add`, `commit`, `push`, `fetch`, `branch`)
+- Installed PowerShell 7 :)
 
 ## 18.09.2026 — Lecture 2
 
-- Pipeline aufgesetzt
-- Erste Berührung mit Docker
-- `.yaml` geprüft und angepasst
-- Alle haben getestet, einen Workflow aufzusetzen
+- Set up a pipeline
+- First contact with Docker
+- Checked and changed the `.yaml`
+- Everyone tested setting up a workflow
 
-## Dokumentation mit MkDocs
+## Documentation with MkDocs
 
-- MkDocs Projekt im Repository initialisiert (`mkdocs.yml`, `docs/`)
-- Dokumentation wird mit dem `squidfunk/mkdocs-material` Image in den `site/` Ordner gebaut
-- Ein nginx-basiertes Image liefert die Dokumentation aus
-- Image wird mit Team-Nummer und Identifier getaggt und in die Registry gepusht
+- Initialized an MkDocs project in the repository (`mkdocs.yml`, `docs/`)
+- The documentation is built into the `site/` folder using the `squidfunk/mkdocs-material` image
+- An nginx-based image serves the documentation
+- The image is tagged with the team number and identifier and pushed to the registry
