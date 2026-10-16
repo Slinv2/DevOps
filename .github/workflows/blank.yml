@@ -15,6 +15,8 @@ jobs:
       REGISTRY: 10.0.40.171:5000
       IMAGE_NAME: docker-java-jar-ryannilsemiliemelsimyurt
       IMAGE_TAG: ${{ github.run_number }}
+      DOCS_IMAGE_NAME: ryannilsemiliemelsimyurt-docs
+      DOCS_IMAGE_TAG: ${{ github.run_number }}
 
     steps:
       - name: reset permissions 
@@ -28,6 +30,11 @@ jobs:
       - name: Build Java application
         run: |
           docker run --rm -u gradle -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:jdk17 gradle build
+
+      # Build documentation: mkdocs-material container produces the static site/ folder
+      - name: Build documentation (MkDocs)
+        run: |
+          docker run --rm -v "$PWD":/docs squidfunk/mkdocs-material build --clean --strict
 
       # SonarQube analysis 
       - name: SonarQube scan
@@ -45,6 +52,10 @@ jobs:
 
       - name: Build Docker Image
         run: docker image build -t "$IMAGE_NAME:$IMAGE_TAG" .
+
+      # Build the documentation image based on nginx, serving the generated site/ folder
+      - name: Build Documentation Docker Image
+        run: docker image build -f Dockerfile.docs -t "$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG" .
 
       # 1. Graceful Interrupt
       - name: Interrupt and Stop existing container
@@ -88,3 +99,32 @@ jobs:
         run: |
           docker tag "$IMAGE_NAME:$IMAGE_TAG" "$REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
           docker push "$REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+
+      # ----- Documentation container deployment -----
+
+      # 6. Graceful Interrupt of existing documentation container
+      - name: Interrupt and Stop existing documentation container
+        run: |
+          if [ $(docker ps -q -f name=ryannilsemiliemelsimyurtdocs) ]; then
+            echo "Gracefully stopping documentation container..."
+            docker stop --time=10 ryannilsemiliemelsimyurtdocs || true
+          fi
+
+      # 7. Cleanup / Removal of stopped documentation container
+      - name: Remove stopped documentation container
+        run: |
+          if [ $(docker ps -a -q -f name=ryannilsemiliemelsimyurtdocs) ]; then
+            echo "Removing existing documentation container..."
+            docker rm -f ryannilsemiliemelsimyurtdocs || true
+          fi
+
+      # 8. Start documentation container on a different port than the application (8081 -> 80)
+      - name: Run new documentation container
+        run: |
+          docker run -d --name ryannilsemiliemelsimyurtdocs -p 8081:80 --restart unless-stopped "$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG"
+
+      # 9. Tag and push documentation image to the team Docker registry
+      - name: Push documentation image to registry
+        run: |
+          docker tag "$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG" "$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG"
+          docker push "$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG"
