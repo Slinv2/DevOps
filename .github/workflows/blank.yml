@@ -64,7 +64,9 @@ jobs:
 
       # Build the documentation image based on nginx, serving the generated site/ folder
       - name: Build Documentation Docker Image
-        run: docker image build -f Dockerfile.docs -t "$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG" .
+        run: |
+          cp outfile.pdf site/doc.pdf
+          docker image build -f Dockerfile.docs -t "$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG" .
 
       # 1. Graceful Interrupt
       - name: Interrupt and Stop existing container
