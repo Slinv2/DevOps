@@ -19,4 +19,13 @@ public class HelloController {
 		return Map.of("status", "UP");
 	}
 
+	@GetMapping("/api/greet")
+	public Map<String, String> greet(@RequestParam(defaultValue = "World") String name) {
+		return Map.of("greeting", greeting(name));
+	}
+
+	String greeting(String name) {
+		return "Hello World, " + name + "!";
+	}
+
 }

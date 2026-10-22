@@ -1,0 +1,5 @@
+# nginx Webserver, der die generierte MkDocs-Dokumentation ausliefert
+FROM nginx:alpine
+
+# Die im Build-Prozess erzeugte statische HTML-Dokumentation in das nginx webroot kopieren
+COPY site /usr/share/nginx/html

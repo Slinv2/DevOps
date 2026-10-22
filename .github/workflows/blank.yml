@@ -11,6 +11,13 @@ jobs:
   build:
     runs-on: self-hosted
 
+    env:
+      REGISTRY: 10.0.40.171:5000
+      IMAGE_NAME: docker-java-jar-ryannilsemiliemelsimyurt
+      IMAGE_TAG: ${{ github.run_number }}
+      DOCS_IMAGE_NAME: ryannilsemiliemelsimyurt-docs
+      DOCS_IMAGE_TAG: ${{ github.run_number }}
+
     steps:
       - name: reset permissions 
         run: docker run --rm -v "$PWD":/project bash:latest chown --recursive $(id -u):$(id -g) /project
@@ -31,46 +38,100 @@ jobs:
         run: |
           docker run --rm -u gradle -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:jdk17 gradle build
 
-      - name: Build Docker Image
-        run: docker image build -t docker-java-jar:latest .
+      # Build documentation: mkdocs-material container produces the static site/ folder
+      - name: Build documentation (MkDocs)
+        run: |
+          docker run --rm -v "$PWD":/docs squidfunk/mkdocs-material build --clean --strict
 
-      # 1. Graceful Interrupt (SIGINT) & Stop (SIGTERM)
+      # SonarQube analysis 
+      - name: SonarQube scan
+        run: |
+          docker run --rm -u "$(id -u):$(id -g)" \
+            -e SONAR_HOST_URL="http://10.0.40.167:9000" \
+            -e SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}" \
+            -v "$PWD":/usr/src \
+            sonarsource/sonar-scanner-cli \
+            -Dsonar.projectKey=ryannilsemiliemelsim \
+            -Dsonar.sources=src/main \
+            -Dsonar.tests=src/test \
+            -Dsonar.java.binaries=build/classes \
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+
+      - name: Build Docker Image
+        run: docker image build -t "$IMAGE_NAME:$IMAGE_TAG" .
+
+      # Build the documentation image based on nginx, serving the generated site/ folder
+      - name: Build Documentation Docker Image
+        run: docker image build -f Dockerfile.docs -t "$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG" .
+
+      # 1. Graceful Interrupt
       - name: Interrupt and Stop existing container
         run: |
-          if [ $(docker ps -q -f name=my-app-container) ]; then
+          if [ $(docker ps -q -f name=ryannilsemiliemelsimyurtcontainer) ]; then
             echo "Gracefully stopping container..."
-            docker stop --time=10 my-app-container || true
+            docker stop --time=10 ryannilsemiliemelsimyurtcontainer || true
           fi
 
       # 2. Cleanup / Removal
       - name: Remove stopped container
         run: |
-          if [ $(docker ps -a -q -f name=my-app-container) ]; then
+          if [ $(docker ps -a -q -f name=ryannilsemiliemelsimyurtcontainer) ]; then
             echo "Removing existing container..."
-            docker rm -f my-app-container || true
+            docker rm -f ryannilsemiliemelsimyurtcontainer || true
           fi
 
       # 3. Start Container (Detached Mode)
       - name: Run new container
         run: |
-          docker run -d --name my-app-container -p 8080:8080 --restart unless-stopped docker-java-jar:latest
+          docker run -d --name ryannilsemiliemelsimyurtcontainer -p 8080:8080 --restart unless-stopped "$IMAGE_NAME:$IMAGE_TAG"
 
       # 4. Integration test: compare live endpoint output against expected fixture
       - name: Integration test /api/status endpoint
         run: |
-          sleep 5
-          expected=$(cat expected/status.json)
-          actual=$(curl -s http://localhost:8080/api/status)
-          if [ "$expected" == "$actual" ]; then
-            echo "Integration test passed"
-            exit 0
-          else
-            echo "Integration test failed: expected '$expected' but got '$actual'"
-            exit 1
-          fi
+          expected=$(cat expected/status.json | tr -d '\r\n')
+          for i in $(seq 1 30); do
+            actual=$(curl -s http://localhost:8080/api/status | tr -d '\r\n')
+            if [ "$expected" == "$actual" ]; then
+              echo "Integration test passed after ${i}s"
+              exit 0
+            fi
+            echo "Attempt ${i}: expected '$expected' but got '$actual', retrying..."
+            sleep 1
+          done
+          echo "Integration test failed after 30 attempts"
+          exit 1
 
-      # 5. Tag and push image to the team Docker registry
+      # 5. Tag and push image to the team Docker registry 123
       - name: Push image to registry
         run: |
-          docker tag docker-java-jar:latest 10.0.40.171:5000/docker-java-jar:latest
-          docker push 10.0.40.171:5000/docker-java-jar:latest
+          docker tag "$IMAGE_NAME:$IMAGE_TAG" "$REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+          docker push "$REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+
+      # ----- Documentation container deployment -----
+
+      # 6. Graceful Interrupt of existing documentation container
+      - name: Interrupt and Stop existing documentation container
+        run: |
+          if [ $(docker ps -q -f name=ryannilsemiliemelsimyurtdocs) ]; then
+            echo "Gracefully stopping documentation container..."
+            docker stop --time=10 ryannilsemiliemelsimyurtdocs || true
+          fi
+
+      # 7. Cleanup / Removal of stopped documentation container
+      - name: Remove stopped documentation container
+        run: |
+          if [ $(docker ps -a -q -f name=ryannilsemiliemelsimyurtdocs) ]; then
+            echo "Removing existing documentation container..."
+            docker rm -f ryannilsemiliemelsimyurtdocs || true
+          fi
+
+      # 8. Start documentation container on a different port than the application (8081 -> 80)
+      - name: Run new documentation container
+        run: |
+          docker run -d --name ryannilsemiliemelsimyurtdocs -p 8081:80 --restart unless-stopped "$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG"
+
+      # 9. Tag and push documentation image to the team Docker registry
+      - name: Push documentation image to registry
+        run: |
+          docker tag "$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG" "$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG"
+          docker push "$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG"
