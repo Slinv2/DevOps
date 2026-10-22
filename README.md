@@ -7,7 +7,7 @@ added all collaborator
 send email
 cloning the repository
 setup the project with spring boot 
-start the application by using .\mvnw spring-boot:run
+start the application by using `.\mvnw spring-boot:run`
 
 10.09.2026 Lecture 1 Part 2
 Connected to the remote server via SSH using my private key.
