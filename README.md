@@ -23,3 +23,7 @@ everyone tested tosetup a workflow
 
 16.10.2026
 setting up the documentation page
+
+22.10.2026
+Copied PDF into folder site and MKdocs and put it in the build agent.
+http://10.0.40.167:8080/doc.pdf
