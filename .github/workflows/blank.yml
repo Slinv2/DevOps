@@ -65,6 +65,7 @@ jobs:
       # Build the documentation image based on nginx, serving the generated site/ folder
       - name: Build Documentation Docker Image
         run: |
+          docker run --rm -v "$PWD":/project bash:latest chown --recursive $(id -u):$(id -g) /project 
           cp outfile.pdf site/doc.pdf
           docker image build -f Dockerfile.docs -t "$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG" .
 
