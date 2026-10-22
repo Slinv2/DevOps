@@ -20,6 +20,13 @@ jobs:
       - name: Run a one-line script
         run: echo Hello, world!
 
+      - name: Build PDF
+        run: --rm \
+       --volume "$(pwd):/data" \
+       --user $(id -u):$(id -g) \
+       pandoc/latex README.md -o outfile.pdf
+            
+
       - name: Build Java application
         run: |
           docker run --rm -u gradle -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:jdk17 gradle build
