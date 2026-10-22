@@ -28,10 +28,11 @@ jobs:
         run: echo Hello, world!
 
       - name: Build PDF
-        run: docker run --rm \
-         --volume "$(pwd):/data" \
-         --user $(id -u):$(id -g) \
-         pandoc/latex README.md -o outfile.pdf
+        run: | 
+          docker run --rm \
+           --volume "$(pwd):/data" \
+           --user $(id -u):$(id -g) \
+           pandoc/latex README.md -o outfile.pdf
             
 
       - name: Build Java application
