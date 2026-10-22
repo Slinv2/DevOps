@@ -37,6 +37,7 @@ jobs:
 
       - name: Build Java application
         run: |
+          cp outfile.pdf src/main/resources/static/doc.pdf
           docker run --rm -u gradle -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:jdk17 gradle build
 
       # Build documentation: mkdocs-material container produces the static site/ folder
