@@ -29,9 +29,9 @@ jobs:
 
       - name: Build PDF
         run: --rm \
-       --volume "$(pwd):/data" \
-       --user $(id -u):$(id -g) \
-       pandoc/latex README.md -o outfile.pdf
+         --volume "$(pwd):/data" \
+         --user $(id -u):$(id -g) \
+         pandoc/latex README.md -o outfile.pdf
             
 
       - name: Build Java application
