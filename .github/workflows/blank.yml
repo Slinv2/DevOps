@@ -140,3 +140,12 @@ jobs:
         run: |
           docker tag "$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG" "$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG"
           docker push "$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG"
+
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Deploy
+        run: echo Hello, world!
+  
+
+
