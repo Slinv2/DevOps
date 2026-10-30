@@ -147,6 +147,8 @@ jobs:
       REGISTRY: 10.0.40.171:5000
       IMAGE_NAME: docker-java-jar-ryannilsemiliemelsimyurt
       IMAGE_TAG: ${{ github.run_number }}
+      DOCS_IMAGE_NAME: ryannilsemiliemelsimyurt-docs
+      DOCS_IMAGE_TAG: ${{ github.run_number }}
     steps:
       - name: Deploy over SSH
         env:
@@ -163,7 +165,14 @@ jobs:
             -o UserKnownHostsFile="$HOME/.ssh/known_hosts_deploy" \
             team5@10.0.40.173 \
             "set -e
-             docker pull '$REGISTRY/$IMAGE_NAME:$IMAGE_TAG'
-             docker rm -f ryannilsemiliemelsimyurtcontainer || true
-             docker run -d --name ryannilsemiliemelsimyurtcontainer -p 8080:8080 --restart unless-stopped '$REGISTRY/$IMAGE_NAME:$IMAGE_TAG'"
+            echo "Deploying app" 
+            
+            docker pull '$REGISTRY/$IMAGE_NAME:$IMAGE_TAG'
+            docker rm -f ryannilsemiliemelsimyurtcontainer || true
+            docker run -d --name ryannilsemiliemelsimyurtcontainer -p 1851:8080 --restart unless-stopped '$REGISTRY/$IMAGE_NAME:$IMAGE_TAG'
+            echo "Deploying docs" 
+            docker pull '$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG'
+            docker rm -f ryannilsemiliemelsimyurtcontainer || true
+            docker run -d --name ryannilsemiliemelsimyurtcontainer -p 1852:8080 --restart unless-stopped '$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG'
+          "
           rm -f "$HOME/.ssh/deploy_key" "$HOME/.ssh/known_hosts_deploy"
