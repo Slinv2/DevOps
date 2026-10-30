@@ -168,11 +168,11 @@ jobs:
             echo "Deploying app" 
             
             docker pull '$REGISTRY/$IMAGE_NAME:$IMAGE_TAG'
-            docker rm -f ryannilsemiliemelsimyurtcontainer || true
-            docker run -d --name ryannilsemiliemelsimyurtcontainer -p 1851:8080 --restart unless-stopped '$REGISTRY/$IMAGE_NAME:$IMAGE_TAG'
+            docker rm -f ryannilsemiliemelsimyurtcontainer-app || true
+            docker run -d --name ryannilsemiliemelsimyurtcontainer-app -p 1851:8080 --restart unless-stopped '$REGISTRY/$IMAGE_NAME:$IMAGE_TAG'
             echo "Deploying docs" 
             docker pull '$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG'
-            docker rm -f ryannilsemiliemelsimyurtcontainer || true
-            docker run -d --name ryannilsemiliemelsimyurtcontainer -p 1852:80 --restart unless-stopped '$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG'
+            docker rm -f ryannilsemiliemelsimyurtcontainer-docs || true
+            docker run -d --name ryannilsemiliemelsimyurtcontainer-docs -p 1852:80 --restart unless-stopped '$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG'
           "
           rm -f "$HOME/.ssh/deploy_key" "$HOME/.ssh/known_hosts_deploy"
