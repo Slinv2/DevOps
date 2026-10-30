@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
       DOCS_IMAGE_TAG: ${{ github.run_number }}
 
     steps:
-      - name: reset permissions 
+      - name: reset permissions
         run: docker run --rm -v "$PWD":/project bash:latest chown --recursive $(id -u):$(id -g) /project
 
       - uses: actions/checkout@v6
@@ -28,12 +28,11 @@ jobs:
         run: echo Hello, world!
 
       - name: Build PDF
-        run: | 
+        run: |
           docker run --rm \
            --volume "$(pwd):/data" \
            --user $(id -u):$(id -g) \
            pandoc/latex README.md -o outfile.pdf
-            
 
       - name: Build Java application
         run: |
@@ -45,7 +44,7 @@ jobs:
         run: |
           docker run --rm -v "$PWD":/docs squidfunk/mkdocs-material build --clean --strict
 
-      # SonarQube analysis 
+      # SonarQube analysis
       - name: SonarQube scan
         run: |
           docker run --rm -u "$(id -u):$(id -g)" \
@@ -156,13 +155,15 @@ jobs:
           install -d -m 700 "$HOME/.ssh"
           printf '%s\n' "$SSH_PRIVATE_KEY" > "$HOME/.ssh/deploy_key"
           chmod 600 "$HOME/.ssh/deploy_key"
-
+          ssh-keyscan 10.0.40.173 >> "$HOME/.ssh/known_hosts_deploy"
           ssh -i "$HOME/.ssh/deploy_key" \
             -o BatchMode=yes \
             -o IdentitiesOnly=yes \
             -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$HOME/.ssh/known_hosts_deploy" \
             team5@10.0.40.173 \
             "set -e
              docker pull '$REGISTRY/$IMAGE_NAME:$IMAGE_TAG'
              docker rm -f ryannilsemiliemelsimyurtcontainer || true
              docker run -d --name ryannilsemiliemelsimyurtcontainer -p 8080:8080 --restart unless-stopped '$REGISTRY/$IMAGE_NAME:$IMAGE_TAG'"
+          rm -f "$HOME/.ssh/deploy_key" "$HOME/.ssh/known_hosts_deploy"
