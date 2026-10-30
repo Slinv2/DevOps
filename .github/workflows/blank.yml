@@ -142,10 +142,31 @@ jobs:
           docker push "$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG"
 
   deploy:
+    needs: build
     runs-on: self-hosted
+    env:
+      REGISTRY: 10.0.40.171:5000
+      IMAGE_NAME: docker-java-jar-ryannilsemiliemelsimyurt
+      IMAGE_TAG: ${{ github.run_number }}
     steps:
-      - name: Deploy
-        run: echo Hello, world!
-  
+      - name: Deploy over SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
+          # SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          # DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          # DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          eval "$(ssh-agent -s)"
+          trap 'ssh-agent -k >/dev/null' EXIT
+
+          printf '%s\n' "$SSH_PRIVATE_KEY" | ssh-add -
+          install -d -m 700 "$HOME/.ssh"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+          ssh -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" \
+            "docker pull '$REGISTRY/$IMAGE_NAME:$IMAGE_TAG' &&
+             docker rm -f ryannilsemiliemelsimyurtcontainer >/dev/null 2>&1 || true
+             docker run -d --name ryannilsemiliemelsimyurtcontainer -p 8080:8080 --restart unless-stopped '$REGISTRY/$IMAGE_NAME:$IMAGE_TAG'"
 
 
