@@ -25,6 +25,9 @@ Ongoing notes from the lectures.
 - Checked and changed the `.yaml`
 - Everyone tested setting up a workflow
 
+## 16.10.2026 - Lecture 6
+setting up the documentation page
+
 ## Documentation with MkDocs
 
 - Initialized an MkDocs project in the repository (`mkdocs.yml`, `docs/`)
