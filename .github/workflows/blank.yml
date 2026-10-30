@@ -173,6 +173,6 @@ jobs:
             echo "Deploying docs" 
             docker pull '$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG'
             docker rm -f ryannilsemiliemelsimyurtcontainer || true
-            docker run -d --name ryannilsemiliemelsimyurtcontainer -p 1852:8080 --restart unless-stopped '$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG'
+            docker run -d --name ryannilsemiliemelsimyurtcontainer -p 1852:80 --restart unless-stopped '$REGISTRY/$DOCS_IMAGE_NAME:$DOCS_IMAGE_TAG'
           "
           rm -f "$HOME/.ssh/deploy_key" "$HOME/.ssh/known_hosts_deploy"
