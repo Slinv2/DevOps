@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wer hat den Build kaputt gemacht?</title>
+<title>Who broke the build?</title>
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -121,47 +121,47 @@
 </style>
 </head>
 <body>
-<h1>🔥 Wer hat die Pipeline zerschossen? 🔥</h1>
+<h1>🔥 Who broke the pipeline? 🔥</h1>
 
 <div class="suspects">
     <div class="suspect">
         <div class="emoji">🧑‍💻</div>
         <div class="name">Ryan</div>
-        <div class="role">behauptet "läuft bei mir"</div>
+        <div class="role">claims "works on my machine"</div>
     </div>
     <div class="suspect">
         <div class="emoji">👩‍🔬</div>
         <div class="name">Emilie</div>
-        <div class="role">hat "nur eine Kleinigkeit" gemerged</div>
+        <div class="role">merged "just a tiny thing"</div>
     </div>
     <div class="suspect">
         <div class="emoji">🧔</div>
         <div class="name">Nils</div>
-        <div class="role">war "nur mal kurz am main branch"</div>
+        <div class="role">was "only quickly on the main branch"</div>
     </div>
     <div class="suspect">
         <div class="emoji">🕵️</div>
         <div class="name">Melsimyurt</div>
-        <div class="role">der stille Commit-Champion</div>
+        <div class="role">the silent commit champion</div>
     </div>
 </div>
 
-<button onclick="verdict()">🎲 Schuldigen ermitteln</button>
+<button onclick="verdict()">🎲 Find the culprit</button>
 
 <div id="verdict"></div>
 
 <script>
     const suspects = [
-        { name: "Ryan", excuse: "weil er ein 'quick fix' ohne Tests gepusht hat 🙈" },
-        { name: "Emilie", excuse: "weil ihr Force-Push den main branch gelöscht hat" },
-        { name: "Nils", excuse: "weil er die .env Datei committed hat " },
-        { name: "Melsimyurt", excuse: "weil er um 23:59 Uhr noch 'ein letztes Feature' reingedrückt hat 🌙" }
+        { name: "Ryan", excuse: "because he pushed a 'quick fix' without tests 🙈" },
+        { name: "Emilie", excuse: "because her force-push deleted the main branch" },
+        { name: "Nils", excuse: "because he committed the .env file" },
+        { name: "Melsimyurt", excuse: "because he squeezed in 'one last feature' at 11:59 PM 🌙" }
     ];
 
     function verdict() {
         const el = document.getElementById('verdict');
         const pick = suspects[Math.floor(Math.random() * suspects.length)];
-        el.textContent = `🚨 ${pick.name} war's — ${pick.excuse}`;
+        el.textContent = `🚨 It was ${pick.name} — ${pick.excuse}`;
         el.classList.remove('show');
         void el.offsetWidth;
         el.classList.add('show');
